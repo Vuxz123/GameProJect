@@ -9,6 +9,7 @@
 #include "MultiTexOb.h"
 #include "TextInput.h"
 #include "Util.cpp"
+#include "GameManager.h"
 
 class GameBase
 {
@@ -23,9 +24,13 @@ public:
 	std::vector<GameObject*> s1, s2, s3;
 
 	TexOb mo = TexOb(), mbo = TexOb(), pbo = TexOb(), gbo = TexOb(), tob1 = TexOb(), tob2 = TexOb(), tob3 = TexOb();
+	
 	MultiTexOb mto = MultiTexOb();
+	
 	ButtonList mbl = ButtonList();
-	AbOb ao = AbOb();
+	
+	AbOb ao = AbOb(), baro = AbOb();
+	
 	TextInput ao2 = TextInput();
 
 	Texture* t = new Texture("Player.bmp");
@@ -45,6 +50,8 @@ public:
 	Text tutor1, tutor2, tutor3;
 
 	Text placeholder;
+
+	GameManager manager = GameManager();
 	
 private:
 	bool running = true;

@@ -9,6 +9,7 @@ class AbOb :
 protected:
 	std::function<void(SDL_Event* Event)> actionevent;
 	std::function<void()> actiontick;
+	std::function<void(SDL_Renderer* renderer)> actionrender;
 	std::map<std::string, int> variable;
 
 public:
@@ -18,6 +19,9 @@ public:
 			return;
 		};
 		actiontick = [=]() {
+			return;
+		};
+		actionrender = [=](SDL_Renderer* renderer) {
 			return;
 		};
 	}
@@ -30,9 +34,15 @@ public:
 		actiontick = _actiontick;
 	}
 
+	void setRender(std::function<void(SDL_Renderer* renderer)> _actionrender) {
+		actionrender = _actionrender;
+	}
+
 	void init(SDL_Renderer* renderer) override{}
 
-	void render(SDL_Renderer* renderer) override{}
+	void render(SDL_Renderer* renderer) override{
+		actionrender(renderer);
+	}
 
 	void eventCheck(SDL_Event* Event) override{
 		actionevent(Event);

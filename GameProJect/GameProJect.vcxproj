@@ -146,9 +146,12 @@
     <ClCompile Include="AbOb.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="ButtonList.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameStructure.cpp" />
+    <ClCompile Include="hangman (2).cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MultiTexOb.cpp" />
     <ClCompile Include="TexOb.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Vector2D.cpp" />
@@ -157,8 +160,10 @@
     <ClInclude Include="AbOb.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="ButtonList.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameStructure.h" />
+    <ClInclude Include="MultiTexOb.h" />
     <ClInclude Include="TexOb.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Util.cpp" />
@@ -173,6 +178,10 @@
   </ItemGroup>
   <ItemGroup>
     <Font Include="font.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Word.txt" />
+    <Text Include="WordMeaning.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

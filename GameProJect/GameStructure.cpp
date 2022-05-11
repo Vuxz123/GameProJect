@@ -123,6 +123,68 @@ void GameBase::init() {
 	mto.setSize(2.5, 2.5);
 	mto.setPos(45 / 2.5, 45 / 2.5);
 
+	baro.setRender([=](SDL_Renderer* renderer) {
+		SDL_Rect outline; outline.y = 100; outline.h = 30; outline.w = 230; outline.x = 600 - 30 - 300;
+		SDL_Rect fill = outline;
+		fill.w = (int) ((((float)manager.health) / 100) * outline.w);
+		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+		SDL_RenderFillRect(renderer, &fill);
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+		SDL_RenderDrawRect(renderer, &outline);
+
+		outline.y = 100 + 50; outline.h = 30; outline.w = 230; outline.x = 600 - 30 - 300;
+		fill = outline;
+		fill.w = (int)((((float)manager.mana) / 100) * outline.w);
+		SDL_SetRenderDrawColor(renderer, 30, 144, 255, 255);
+		SDL_RenderFillRect(renderer, &fill);
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+		SDL_RenderDrawRect(renderer, &outline);
+		
+	});
+	baro.setTick([=]() {
+		mto.setCurTexture();
+		if (manager.health <= 80) {
+			mto.setCurTexture(1);
+		}
+		else if (manager.health <= 70) {
+			mto.setCurTexture(2);
+		}
+		else if (manager.health <= 60) {
+			mto.setCurTexture(3);
+		}
+		else if (manager.health <= 50) {
+			mto.setCurTexture(4);
+		}
+		else if (manager.health <= 40) {
+			mto.setCurTexture(5);
+		}
+		else if (manager.health <= 30) {
+			mto.setCurTexture(6);
+		}
+		else if (manager.health <= 20) {
+			mto.setCurTexture(7);
+		}
+		else if (manager.health <= 10) {
+			mto.setCurTexture(8);
+		}
+	});
+
+	baro.setEvent([=](SDL_Event* Event) {
+		if (Event->type = SDL_KEYUP && Event->key.state == SDL_RELEASED) {
+			switch (Event->key.keysym.sym)
+			{
+			case SDLK_a:
+				manager.addHealth(-10);
+				break;
+			case SDLK_d:
+				manager.addHealth(10);
+				break;
+			default:
+				break;
+			}
+		}
+	});
+
 	
 	//Setup Scene
 	SDL_Log("Setup Scene");
@@ -137,6 +199,7 @@ void GameBase::init() {
 	s2.push_back((GameObject*)&ao);
 	s2.push_back((GameObject*)&ao2);
 	s2.push_back((GameObject*)&tob3);
+	s2.push_back((GameObject*)&baro);
 	
 
 	addScene("scene1", s1);
