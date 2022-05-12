@@ -42,6 +42,10 @@ inline void load(Text &res , SDL_Renderer* renderer, std::string text, std::stri
 	return;
 }
 
+inline void deload(Text& res) {
+	SDL_DestroyTexture(res.texture);
+}
+
 inline SDL_Rect toSDL_Rect(Vector2D position, int w, int h) {
 	SDL_Rect a;
 	a.x = (int)position.getX();

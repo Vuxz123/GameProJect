@@ -77,14 +77,23 @@ void GameBase::init() {
 			load(selectedchar, renderer, std::string(1, (char)ao2.getVar("input")), "font.ttf", 24);
 			SDL_Rect pos; pos.x = 600 - 50; pos.y = 600 - 300 + 50; pos.w = selectedchar.w; pos.h = selectedchar.h;
 			SDL_RenderCopy(renderer, selectedchar.texture, NULL, &pos);
+			deload(selectedchar);
 		}
 		load(placeholder, renderer, manager.getDisplay_Word(), "font.ttf", 24);
 		SDL_Rect pos; pos.x = 50; pos.y = 300; pos.w = placeholder.w; pos.h = placeholder.h;
 		SDL_RenderCopy(renderer, placeholder.texture, NULL, &pos);
+		deload(placeholder);
 
 		load(placeholder, renderer, manager.getWord(), "font.ttf", 24);
 		pos; pos.x = 50; pos.y = 350; pos.w = placeholder.w; pos.h = placeholder.h;
 		SDL_RenderCopy(renderer, placeholder.texture, NULL, &pos);
+		deload(placeholder);
+
+		load(placeholder, renderer, manager.getWord_Meaning(), "font.ttf", 24);
+		pos; pos.x = 50; pos.y = 400; pos.w = placeholder.w; pos.h = placeholder.h;
+		SDL_RenderCopy(renderer, placeholder.texture, NULL, &pos);
+		deload(placeholder);
+
 	});
 
 	gmo.setEvent([=](SDL_Event* Event) {
@@ -181,6 +190,7 @@ void GameBase::init() {
 		outline.w = h_m_display.w;
 		outline.h = h_m_display.h;
 		SDL_RenderCopy(renderer, h_m_display.texture, NULL, &outline);
+		deload(h_m_display);
 
 		outline.y = 100 + 50; outline.h = 30; outline.w = 280; outline.x = 600 - 30 - 300;
 		fill = outline;
@@ -195,6 +205,7 @@ void GameBase::init() {
 		outline.w = h_m_display.w;
 		outline.h = h_m_display.h;
 		SDL_RenderCopy(renderer, h_m_display.texture, NULL, &outline);
+		deload(h_m_display);
 		
 	});
 	baro.setTick([=]() {
