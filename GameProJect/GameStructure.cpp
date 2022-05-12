@@ -64,6 +64,50 @@ void GameBase::init() {
 	//Setup Object
 	SDL_Log("Setup Object");
 
+	gmo.addVar("getinputperiod", 0);
+
+	/*gmo.setTick([=]() {
+		if (gmo.getVar("getinputperiod")) {
+
+		}
+	});*/
+
+	gmo.setRender([=](SDL_Renderer* renderer) {
+		if (ao2.getVar("input") != 0) {
+			load(selectedchar, renderer, std::string(1, (char)ao2.getVar("input")), "font.ttf", 24);
+			SDL_Rect pos; pos.x = 600 - 50; pos.y = 600 - 300 + 50; pos.w = selectedchar.w; pos.h = selectedchar.h;
+			SDL_RenderCopy(renderer, selectedchar.texture, NULL, &pos);
+		}
+		load(placeholder, renderer, manager.getDisplay_Word(), "font.ttf", 24);
+		SDL_Rect pos; pos.x = 50; pos.y = 300; pos.w = placeholder.w; pos.h = placeholder.h;
+		SDL_RenderCopy(renderer, placeholder.texture, NULL, &pos);
+
+		load(placeholder, renderer, manager.getWord(), "font.ttf", 24);
+		pos; pos.x = 50; pos.y = 350; pos.w = placeholder.w; pos.h = placeholder.h;
+		SDL_RenderCopy(renderer, placeholder.texture, NULL, &pos);
+	});
+
+	gmo.setEvent([=](SDL_Event* Event) {
+		if (Event->type = SDL_KEYDOWN && Event->key.state == SDL_RELEASED) {
+			switch (Event->key.keysym.sym)
+			{
+			case SDLK_LSHIFT:
+				if (! manager.guessChar(ao2.getVar("input"))) {
+					manager.addHealth(-10);
+				}
+				else {
+					manager.addHealth(10);
+				}
+				break;
+			case SDLK_RSHIFT:
+				manager.reset();
+				break;
+			default:
+				break;
+			}
+		}
+	});
+
 	tob1.setTexture(&tutor1);
 	tob1.setSize(1, 1);
 	tob1.setPos(30, 600 - 50);
@@ -124,7 +168,7 @@ void GameBase::init() {
 	mto.setPos(45 / 2.5, 45 / 2.5);
 
 	baro.setRender([=](SDL_Renderer* renderer) {
-		SDL_Rect outline; outline.y = 100; outline.h = 30; outline.w = 230; outline.x = 600 - 30 - 300;
+		SDL_Rect outline; outline.y = 100; outline.h = 30; outline.w = 280; outline.x = 600 - 30 - 300;
 		SDL_Rect fill = outline;
 		fill.w = (int) ((((float)manager.health) / 100) * outline.w);
 		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
@@ -132,59 +176,56 @@ void GameBase::init() {
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderDrawRect(renderer, &outline);
 
-		outline.y = 100 + 50; outline.h = 30; outline.w = 230; outline.x = 600 - 30 - 300;
+		load(h_m_display, renderer, std::to_string(manager.health), "font.ttf", 24);
+		outline.x += 5;
+		outline.w = h_m_display.w;
+		outline.h = h_m_display.h;
+		SDL_RenderCopy(renderer, h_m_display.texture, NULL, &outline);
+
+		outline.y = 100 + 50; outline.h = 30; outline.w = 280; outline.x = 600 - 30 - 300;
 		fill = outline;
 		fill.w = (int)((((float)manager.mana) / 100) * outline.w);
 		SDL_SetRenderDrawColor(renderer, 30, 144, 255, 255);
 		SDL_RenderFillRect(renderer, &fill);
 		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 		SDL_RenderDrawRect(renderer, &outline);
+
+		load(h_m_display, renderer, std::to_string(manager.mana), "font.ttf", 24);
+		outline.x += 5;
+		outline.w = h_m_display.w;
+		outline.h = h_m_display.h;
+		SDL_RenderCopy(renderer, h_m_display.texture, NULL, &outline);
 		
 	});
 	baro.setTick([=]() {
-		mto.setCurTexture();
-		if (manager.health <= 80) {
+		if (manager.health >= 80) {
+			mto.setCurTexture(0);
+		}
+		else if (manager.health >= 70) {
 			mto.setCurTexture(1);
 		}
-		else if (manager.health <= 70) {
+		else if (manager.health >= 60) {
 			mto.setCurTexture(2);
 		}
-		else if (manager.health <= 60) {
+		else if (manager.health >= 50) {
 			mto.setCurTexture(3);
 		}
-		else if (manager.health <= 50) {
+		else if (manager.health >= 40) {
 			mto.setCurTexture(4);
 		}
-		else if (manager.health <= 40) {
+		else if (manager.health >= 30) {
 			mto.setCurTexture(5);
 		}
-		else if (manager.health <= 30) {
+		else if (manager.health >= 20) {
 			mto.setCurTexture(6);
 		}
-		else if (manager.health <= 20) {
+		else if (manager.health >= 10) {
 			mto.setCurTexture(7);
 		}
-		else if (manager.health <= 10) {
-			mto.setCurTexture(8);
+		else {
+			mto.setCurTexture(7);
 		}
 	});
-
-	baro.setEvent([=](SDL_Event* Event) {
-		if (Event->type = SDL_KEYUP && Event->key.state == SDL_RELEASED) {
-			switch (Event->key.keysym.sym)
-			{
-			case SDLK_a:
-				manager.addHealth(-10);
-				break;
-			case SDLK_d:
-				manager.addHealth(10);
-				break;
-			default:
-				break;
-			}
-		}
-	});
-
 	
 	//Setup Scene
 	SDL_Log("Setup Scene");
@@ -200,6 +241,7 @@ void GameBase::init() {
 	s2.push_back((GameObject*)&ao2);
 	s2.push_back((GameObject*)&tob3);
 	s2.push_back((GameObject*)&baro);
+	s2.push_back((GameObject*)&gmo);
 	
 
 	addScene("scene1", s1);

@@ -1,7 +1,9 @@
 #pragma once
+#include <iostream>
 #include <string>
 #include <vector>
 #include <fstream>
+#include <algorithm>
 class GameManager
 {
 public:
@@ -16,6 +18,8 @@ protected:
 
 	std::vector<std::string> wordlist;
 	std::vector<std::string> wordmeaninglist;
+	
+	std::vector<char> guessedchar;
 
 public:
 	void addHealth(int add) {
@@ -32,6 +36,13 @@ public:
 		mana = 100;
 
 		loadWord();
+		setRandom();
+	}
+
+	void reset() {
+		health = 100;
+		mana = 100;
+
 		setRandom();
 	}
 
@@ -58,6 +69,9 @@ public:
 	}
 
 	void setRandom() {
+		guessedchar = std::vector<char>();
+		srand(time(0));
+
 		int i = rand() % wordlist.size();
 		word = wordlist[i];
 		word_meaning = wordmeaninglist[i];
@@ -74,6 +88,22 @@ public:
 
 	std::string getWord_Meaning() {
 		return word_meaning;
+	}
+
+	bool guessChar(char c) {
+		if (std::find(guessedchar.begin(), guessedchar.end(), c) != guessedchar.end()) {
+			std::cout << "find" << std::endl;
+			return false;
+		}
+		bool a = false;
+		for (int i = 0; i < word.length(); i++) {
+			if (word[i] == c) {
+				displace_word[i] = c;
+				a = true;
+			}
+		}
+		guessedchar.push_back(c);
+		return a;
 	}
 
 };

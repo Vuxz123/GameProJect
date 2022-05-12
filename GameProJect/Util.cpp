@@ -11,6 +11,7 @@ struct Text {
 	~Text() {
 		if (texture != NULL) {
 			SDL_DestroyTexture(texture);
+			texture = NULL;
 		}
 	}
 };

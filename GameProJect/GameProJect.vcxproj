@@ -165,6 +165,7 @@
     <ClInclude Include="GameStructure.h" />
     <ClInclude Include="MultiTexOb.h" />
     <ClInclude Include="TexOb.h" />
+    <ClInclude Include="TextInput.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Util.cpp" />
     <ClInclude Include="Vector2D.h" />

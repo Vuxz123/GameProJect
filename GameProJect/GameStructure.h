@@ -29,7 +29,7 @@ public:
 	
 	ButtonList mbl = ButtonList();
 	
-	AbOb ao = AbOb(), baro = AbOb();
+	AbOb ao = AbOb(), baro = AbOb(), gmo = AbOb();
 	
 	TextInput ao2 = TextInput();
 
@@ -47,9 +47,9 @@ public:
 	Texture* test7 = new Texture("PlayerHead7.png");
 	Texture* test8 = new Texture("PlayerHead8.png");
 
-	Text tutor1, tutor2, tutor3;
+	Text tutor1, tutor2, tutor3, h_m_display;
 
-	Text placeholder;
+	Text placeholder, selectedchar;
 
 	GameManager manager = GameManager();
 	

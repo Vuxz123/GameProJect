@@ -86,6 +86,9 @@
     <ClInclude Include="MultiTexOb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TextInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Player.bmp">
