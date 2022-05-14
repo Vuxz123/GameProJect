@@ -66,7 +66,7 @@ private:
 	SDL_Window* window;
 	SDL_Event Event;
 
-	const std::string VERSION = "0.1.0";
+	const std::string VERSION = "0.1.1";
 	const std::string TITLE = "Hang Man";
 
 public:

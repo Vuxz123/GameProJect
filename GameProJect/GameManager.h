@@ -56,7 +56,7 @@ public:
 	}
 
 	GameManager() {
-		health = 50;
+		health = 100;
 		mana = 100;
 
 		loadWord();

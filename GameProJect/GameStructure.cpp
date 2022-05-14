@@ -249,30 +249,39 @@ void GameBase::init() {
 	baro.setTick([=]() {
 		if (manager.health >= 80) {
 			mto.setCurTexture(0);
+			gbo.setColorMod(255, 255, 255);
 		}
 		else if (manager.health >= 70) {
 			mto.setCurTexture(1);
+			gbo.setColorMod(255, 230, 230);
 		}
 		else if (manager.health >= 60) {
 			mto.setCurTexture(2);
+			gbo.setColorMod(255, 200, 200);
 		}
 		else if (manager.health >= 50) {
 			mto.setCurTexture(3);
+			gbo.setColorMod(255, 175, 175);
 		}
 		else if (manager.health >= 40) {
 			mto.setCurTexture(4);
+			gbo.setColorMod(255, 150, 150);
 		}
 		else if (manager.health >= 30) {
 			mto.setCurTexture(5);
+			gbo.setColorMod(255, 125, 125);
 		}
 		else if (manager.health >= 20) {
 			mto.setCurTexture(6);
+			gbo.setColorMod(255, 100, 100);
 		}
 		else if (manager.health >= 10) {
 			mto.setCurTexture(7);
+			gbo.setColorMod(255, 50, 50);
 		}
 		else {
 			mto.setCurTexture(7);
+			gbo.setColorMod(255, 0, 0);
 		}
 	});
 	
