@@ -52,8 +52,6 @@ galaxy
 galvanize
 gazebo
 glowworm
-glyph
-gnarly
 gnostic
 gossip
 grogginess

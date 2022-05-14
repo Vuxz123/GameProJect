@@ -19,15 +19,15 @@ public:
 
 	const std::string MENU = "scene1";
 	const std::string GAME = "scene2";
-	const std::string IGMENU = "scene3";
+	const std::string ENDGAME = "scene3";
 
 	std::vector<GameObject*> s1, s2, s3;
 
-	TexOb mo = TexOb(), mbo = TexOb(), pbo = TexOb(), gbo = TexOb(), tob1 = TexOb(), tob2 = TexOb(), tob3 = TexOb();
+	TexOb mo = TexOb(), mbo = TexOb(), pbo = TexOb(), gbo = TexOb(), tob1 = TexOb(), tob2 = TexOb(), tob3 = TexOb(), spello = TexOb(), guesso = TexOb(), sellecto = TexOb();
 	
 	MultiTexOb mto = MultiTexOb();
 	
-	ButtonList mbl = ButtonList();
+	ButtonList mbl = ButtonList(), ingamebuttonlist = ButtonList();
 	
 	AbOb ao = AbOb(), baro = AbOb(), gmo = AbOb();
 	
@@ -46,6 +46,9 @@ public:
 	Texture* test6 = new Texture("PlayerHead6.png");
 	Texture* test7 = new Texture("PlayerHead7.png");
 	Texture* test8 = new Texture("PlayerHead8.png");
+	Texture* spellbutton = new Texture("spell.png");
+	Texture* guessbutton = new Texture("guess.png");
+	Texture* sellectbutton = new Texture("sellectchar.png");
 
 	Text tutor1, tutor2, tutor3, h_m_display;
 

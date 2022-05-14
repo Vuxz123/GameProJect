@@ -4,13 +4,35 @@
 #include <vector>
 #include <fstream>
 #include <algorithm>
+
+struct PlayerData {
+	int score;
+	float time;
+
+	PlayerData(int score_ = 0, float time_ = 0) {
+		score = score_;
+		time = time_;
+	}
+
+	std::string toString() {
+		std::string s;
+		s = std::to_string(score) + ": " + std::to_string(time);
+		return s;
+	}
+};
+
 class GameManager
 {
 public:
+	float time_start, time_end;
+
+
 	int health;
 	int mana;
 
 protected:
+
+	PlayerData data = PlayerData();
 
 	std::string word;
 	std::string displace_word;
@@ -18,6 +40,8 @@ protected:
 
 	std::vector<std::string> wordlist;
 	std::vector<std::string> wordmeaninglist;
+
+	std::vector<std::string> scorelist;
 	
 	std::vector<char> guessedchar;
 
@@ -58,10 +82,16 @@ public:
 
 		wordinput.close();
 
+		int length = wordlist.size();
+
 		wordinput.open("WordMeaning.txt", std::ifstream::in);
 
-		while (wordinput >> temp) {
+		int i = 0;
+
+		while (i < length) {
+			std::getline(wordinput, temp);
 			wordmeaninglist.push_back(temp);
+			i++;
 		}
 
 		wordinput.close();
@@ -92,7 +122,7 @@ public:
 
 	bool guessChar(char c) {
 		if (std::find(guessedchar.begin(), guessedchar.end(), c) != guessedchar.end()) {
-			std::cout << "find" << std::endl;
+			guessedchar.push_back(c);
 			return false;
 		}
 		bool a = false;
@@ -104,6 +134,44 @@ public:
 		}
 		guessedchar.push_back(c);
 		return a;
+	}
+
+	void loadScore() {
+
+	}
+
+	std::string getGuessedWord() {
+		if (guessedchar.empty()) return  "GUESSED:";
+		std::string temp = "";
+		/*for (auto i = guessedchar.end(); i != guessedchar.end() - 6; i--) {
+			temp = temp + std::string(1, *i) + " ";
+		}*/
+		/*auto iter = guessedchar.end() - 1;
+		int i = 0;
+		int length = (guessedchar.size() < 6) ? guessedchar.size() : 6;
+		while (i < length) {
+			temp = temp + *iter + " ";
+			i++;
+			iter--;
+		}*/
+		if (guessedchar.size() <= 3) {
+			for (char i : guessedchar) {
+				temp = temp + std::string(1, i) + " ";
+			}
+		}
+		else {
+			auto iter = guessedchar.end() - 1;
+			int i = 0;
+			
+			while (i < 3) {
+				temp = temp + *iter + " ";
+				i++;
+				iter--;
+			}
+		}
+		
+		temp = "GUESSED: " + temp;
+		return temp;
 	}
 
 };

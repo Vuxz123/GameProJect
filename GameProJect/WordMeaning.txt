@@ -37,13 +37,13 @@ gian diep
 cuoc di cu
 lam gia
 luoi cau
-co the sua
+co the sua chua
 vinh hep
 vat ao
 that bai
 su mem mai
 bay bang
-bao tay cao
+bao tay con cao
 co long to
 lan tan
 hoa van anh
@@ -51,6 +51,7 @@ vui
 ngan ha
 ma
 tieu dinh
+sau phat sang
 ngo dao
 mach leo
 su lam li
@@ -121,6 +122,7 @@ cau kinh
 nhan su
 nhan vien
 suc manh
+diem manh
 keo dai
 thanh tri
 ngan can

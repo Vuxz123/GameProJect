@@ -56,6 +56,9 @@ void GameBase::init() {
 	test7->load(renderer);
 	test8->load(renderer);
 	gb->load(renderer);
+	spellbutton->load(renderer);
+	guessbutton->load(renderer);
+	sellectbutton->load(renderer);
 	load(tutor1, renderer, "TAB to change Button", "font.ttf", 12);
 	load(tutor2, renderer, "SPACE to select", "font.ttf", 12);
 	load(tutor3, renderer, "ESCAPE to back to Menu", "font.ttf", 12);
@@ -72,31 +75,34 @@ void GameBase::init() {
 		}
 	});*/
 
+	gmo.setTick([=]() {
+
+		if (manager.health <= 0) {
+			changeScene(ENDGAME);
+		}
+
+	});
+
 	gmo.setRender([=](SDL_Renderer* renderer) {
 		if (ao2.getVar("input") != 0) {
-			load(selectedchar, renderer, std::string(1, (char)ao2.getVar("input")), "font.ttf", 24);
-			SDL_Rect pos; pos.x = 600 - 50; pos.y = 600 - 300 + 50; pos.w = selectedchar.w; pos.h = selectedchar.h;
+			load(selectedchar, renderer, std::string(1, (char)ao2.getVar("input")), "font.ttf", 120);
+			SDL_Rect pos; pos.x = 480 + 5; pos.y = 210 - 15; pos.w = selectedchar.w; pos.h = selectedchar.h;
 			SDL_RenderCopy(renderer, selectedchar.texture, NULL, &pos);
 			deload(selectedchar);
 		}
-		load(placeholder, renderer, manager.getDisplay_Word(), "font.ttf", 24);
-		SDL_Rect pos; pos.x = 50; pos.y = 300; pos.w = placeholder.w; pos.h = placeholder.h;
+		load(placeholder, renderer, manager.getDisplay_Word() + "  :  " + manager.getWord_Meaning(), "font.ttf", 24);
+		SDL_Rect pos; pos.x = 40; pos.y = 300; pos.w = placeholder.w; pos.h = placeholder.h;
 		SDL_RenderCopy(renderer, placeholder.texture, NULL, &pos);
 		deload(placeholder);
 
-		load(placeholder, renderer, manager.getWord(), "font.ttf", 24);
-		pos; pos.x = 50; pos.y = 350; pos.w = placeholder.w; pos.h = placeholder.h;
-		SDL_RenderCopy(renderer, placeholder.texture, NULL, &pos);
-		deload(placeholder);
-
-		load(placeholder, renderer, manager.getWord_Meaning(), "font.ttf", 24);
-		pos; pos.x = 50; pos.y = 400; pos.w = placeholder.w; pos.h = placeholder.h;
+		load(placeholder, renderer, manager.getGuessedWord(), "font.ttf", 24);
+		pos; pos.x = 40; pos.y = 240; pos.w = placeholder.w; pos.h = placeholder.h;
 		SDL_RenderCopy(renderer, placeholder.texture, NULL, &pos);
 		deload(placeholder);
 
 	});
 
-	gmo.setEvent([=](SDL_Event* Event) {
+	/*gmo.setEvent([=](SDL_Event* Event) {
 		if (Event->type = SDL_KEYDOWN && Event->key.state == SDL_RELEASED) {
 			switch (Event->key.keysym.sym)
 			{
@@ -115,7 +121,39 @@ void GameBase::init() {
 				break;
 			}
 		}
-	});
+	});*/
+
+	spello.setTexture(spellbutton);
+	spello.setPos(60, 420);
+	spello.setSize(1, 1);
+
+	guesso.setTexture(guessbutton);
+	guesso.setPos(60 + 120 + 60, 420);
+	guesso.setSize(1, 1);
+
+	sellecto.setTexture(sellectbutton);
+	sellecto.setPos(60 + 120 + 60 + 120 + 60, 420);
+	sellecto.setSize(1, 1);
+
+	ingamebuttonlist.addButton(&spello, [=]() {
+
+		return;
+		}, 0);
+
+	ingamebuttonlist.addButton(&guesso, [=]() {
+		if (!manager.guessChar(ao2.getVar("input"))) {
+			manager.addHealth(-10);
+		}
+		else {
+			manager.addHealth(10);
+		}
+		return;
+	}, 1);
+
+	ingamebuttonlist.addButton(&sellecto, [=]() {
+		(ao2.getVar("checkinput") == 1) ? ao2.setVar("checkinput", 0) : ao2.setVar("checkinput", 1);
+		return;
+	}, 2);
 
 	tob1.setTexture(&tutor1);
 	tob1.setSize(1, 1);
@@ -150,11 +188,11 @@ void GameBase::init() {
 		if (Event->type == SDL_KEYDOWN && Event->key.keysym.sym == SDLK_ESCAPE) {
 			changeScene(MENU);
 		}
-		if (Event->type == SDL_KEYDOWN && Event->key.keysym.sym == SDLK_SPACE) {
+		/*if (Event->type == SDL_KEYDOWN && Event->key.keysym.sym == SDLK_SPACE) {
 			(ao2.getVar("checkinput") == 1) ? ao2.setVar("checkinput", 0) : ao2.setVar("checkinput", 1);
 			std::cout << ao2.getVar("checkinput") << std::endl;
 			
-		}
+		}*/
 		return;
 		});
 
@@ -174,7 +212,7 @@ void GameBase::init() {
 	mto.addTex(test); mto.addTex(test2); mto.addTex(test3); mto.addTex(test4); mto.addTex(test5); mto.addTex(test6); mto.addTex(test7); mto.addTex(test8);
 	mto.setCurTexture();
 	mto.setSize(2.5, 2.5);
-	mto.setPos(45 / 2.5, 45 / 2.5);
+	mto.setPos(45 / 2.5, 45 / 2.5 - 15);
 
 	baro.setRender([=](SDL_Renderer* renderer) {
 		SDL_Rect outline; outline.y = 100; outline.h = 30; outline.w = 280; outline.x = 600 - 30 - 300;
@@ -253,6 +291,7 @@ void GameBase::init() {
 	s2.push_back((GameObject*)&tob3);
 	s2.push_back((GameObject*)&baro);
 	s2.push_back((GameObject*)&gmo);
+	s2.push_back((GameObject*)&ingamebuttonlist);
 	
 
 	addScene("scene1", s1);
