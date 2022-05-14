@@ -80,6 +80,9 @@ void GameBase::init() {
 		if (manager.health <= 0) {
 			changeScene(ENDGAME);
 		}
+		else if (manager.getDisplay_Word() == manager.getWord()) {
+			manager.setRandom();
+		}
 
 	});
 
