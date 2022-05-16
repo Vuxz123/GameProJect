@@ -24,6 +24,7 @@ struct PlayerData {
 class GameManager
 {
 public:
+	float guessingtime;
 	float time_start, time_end;
 
 
@@ -32,7 +33,7 @@ public:
 
 protected:
 
-	PlayerData data = PlayerData();
+	PlayerData data ;
 
 	std::string word;
 	std::string displace_word;
@@ -46,6 +47,11 @@ protected:
 	std::vector<char> guessedchar;
 
 public:
+	void timer(float time) {
+		guessingtime -= time;
+		if (guessingtime < 0) guessingtime = 0;
+	}
+
 	void addHealth(int add) {
 		if (health == 100 && add > 0) return;
 		health = health + add;
@@ -56,6 +62,7 @@ public:
 	}
 
 	GameManager() {
+		guessingtime = 30;
 		health = 100;
 		mana = 100;
 
@@ -64,6 +71,8 @@ public:
 	}
 
 	void reset() {
+		
+		guessingtime = 30;
 		health = 100;
 		mana = 100;
 
@@ -99,6 +108,7 @@ public:
 	}
 
 	void setRandom() {
+		guessingtime = 30;
 		guessedchar = std::vector<char>();
 		srand(time(0));
 

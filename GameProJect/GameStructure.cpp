@@ -59,13 +59,48 @@ void GameBase::init() {
 	spellbutton->load(renderer);
 	guessbutton->load(renderer);
 	sellectbutton->load(renderer);
+	yes_texture->load(renderer);
+	no_texture->load(renderer);
+
 	load(tutor1, renderer, "TAB to change Button", "font.ttf", 12);
 	load(tutor2, renderer, "SPACE to select", "font.ttf", 12);
 	load(tutor3, renderer, "ESCAPE to back to Menu", "font.ttf", 12);
-	
+	load(ctn_y_n_text, renderer, "Continue ?", "font.ttf", 36);
+	load(endgame, renderer, "END!", "font.ttf", 48);
 
 	//Setup Object
 	SDL_Log("Setup Object");
+
+
+
+	bg.setRender([=](SDL_Renderer* renderer) {
+		SDL_Rect rect = { 0,0,600,600 };
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+		SDL_RenderDrawRect(renderer, &rect);
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	});
+
+	ctn_text_ob.setPos(30, 30);
+	ctn_text_ob.setTexture(&ctn_y_n_text);
+	ctn_text_ob.setSize(1, 1);
+	ctn_text_ob.setColorMod(255, 0, 0);
+
+	yes_button.setPos(30, 300);
+	yes_button.setTexture(yes_texture);
+	yes_button.setSize(1, 1);
+
+	no_button.setPos(600 - 120 - 30, 300);
+	no_button.setTexture(no_texture);
+	no_button.setSize(1, 1);
+
+	ctn_buttonlist.addButton(&yes_button, [=]() {
+		changeScene(GAME);
+	}, 0);
+
+	ctn_buttonlist.addButton(&no_button, [=]() {
+		changeScene(ENDGAME);
+	}, 1);
+
 
 	gmo.addVar("getinputperiod", 0);
 
@@ -76,11 +111,16 @@ void GameBase::init() {
 	});*/
 
 	gmo.setTick([=]() {
-
+		manager.timer(delta);
+		if (manager.guessingtime <= 0) {
+			manager.addHealth(-20);
+			manager.guessingtime = 30;
+		}
 		if (manager.health <= 0) {
 			changeScene(ENDGAME);
 		}
 		else if (manager.getDisplay_Word() == manager.getWord()) {
+			changeScene(CONTINUE);
 			manager.setRandom();
 		}
 
@@ -103,28 +143,12 @@ void GameBase::init() {
 		SDL_RenderCopy(renderer, placeholder.texture, NULL, &pos);
 		deload(placeholder);
 
-	});
+		load(placeholder, renderer,std::to_string((int) manager.guessingtime), "font.ttf", 24);
+		pos; pos.x = 340; pos.y = 240; pos.w = placeholder.w; pos.h = placeholder.h;
+		SDL_RenderCopy(renderer, placeholder.texture, NULL, &pos);
+		deload(placeholder);
 
-	/*gmo.setEvent([=](SDL_Event* Event) {
-		if (Event->type = SDL_KEYDOWN && Event->key.state == SDL_RELEASED) {
-			switch (Event->key.keysym.sym)
-			{
-			case SDLK_LSHIFT:
-				if (! manager.guessChar(ao2.getVar("input"))) {
-					manager.addHealth(-10);
-				}
-				else {
-					manager.addHealth(10);
-				}
-				break;
-			case SDLK_RSHIFT:
-				manager.reset();
-				break;
-			default:
-				break;
-			}
-		}
-	});*/
+	});
 
 	spello.setTexture(spellbutton);
 	spello.setPos(60, 420);
@@ -144,6 +168,7 @@ void GameBase::init() {
 		}, 0);
 
 	ingamebuttonlist.addButton(&guesso, [=]() {
+		manager.guessingtime = 30;
 		if (!manager.guessChar(ao2.getVar("input"))) {
 			manager.addHealth(-10);
 		}
@@ -191,22 +216,16 @@ void GameBase::init() {
 		if (Event->type == SDL_KEYDOWN && Event->key.keysym.sym == SDLK_ESCAPE) {
 			changeScene(MENU);
 		}
-		/*if (Event->type == SDL_KEYDOWN && Event->key.keysym.sym == SDLK_SPACE) {
-			(ao2.getVar("checkinput") == 1) ? ao2.setVar("checkinput", 0) : ao2.setVar("checkinput", 1);
-			std::cout << ao2.getVar("checkinput") << std::endl;
-			
-		}*/
 		return;
 		});
 
 	ao.setTick([=]() {
-		/*mto.setPos(45 / 2.5 + 10 * sin(newtime * M_PI / 300), 45 / 2.5 + 5 * cos(newtime * M_PI / 300));
-		int a = 256 * ( 1 + sin(newtime * M_PI / 3000))/2;
-		std::cout << a << std::endl;
-		mto.setColorMod(a, a, a);
-		ao.setVar("colormod", a);*/
+		mto.setPos(45 / 2.5 + 10 * sin(newtime * M_PI / 300), 45 / 2.5 + 5 * cos(newtime * M_PI / 300));
+		int a = 255 - 200 * ( 1 + sin(newtime * M_PI / 3000))/2;
+		mto.setColorMod(255, a, a);
+		ao.setVar("colormod", a);
 		return;
-		});
+	});
 
 	gbo.setTexture(gb);
 	gbo.setSize(1, 1);
@@ -215,7 +234,7 @@ void GameBase::init() {
 	mto.addTex(test); mto.addTex(test2); mto.addTex(test3); mto.addTex(test4); mto.addTex(test5); mto.addTex(test6); mto.addTex(test7); mto.addTex(test8);
 	mto.setCurTexture();
 	mto.setSize(2.5, 2.5);
-	mto.setPos(45 / 2.5, 45 / 2.5 - 15);
+	mto.setPos(45 / 2.5, 10 / 2.5 );
 
 	baro.setRender([=](SDL_Renderer* renderer) {
 		SDL_Rect outline; outline.y = 100; outline.h = 30; outline.w = 280; outline.x = 600 - 30 - 300;
@@ -287,6 +306,8 @@ void GameBase::init() {
 			gbo.setColorMod(255, 0, 0);
 		}
 	});
+
+	
 	
 	//Setup Scene
 	SDL_Log("Setup Scene");
@@ -304,10 +325,15 @@ void GameBase::init() {
 	s2.push_back((GameObject*)&baro);
 	s2.push_back((GameObject*)&gmo);
 	s2.push_back((GameObject*)&ingamebuttonlist);
-	
 
-	addScene("scene1", s1);
-	addScene("scene2", s2);
+	s4.push_back((GameObject*)&bg);
+	s4.push_back((GameObject*)&bg);
+	s4.push_back((GameObject*)&ctn_text_ob);
+	s4.push_back((GameObject*)&ctn_buttonlist);
+
+	addScene(MENU, s1);
+	addScene(GAME, s2);
+	addScene(CONTINUE, s4);
 
 	changeScene("scene1");
 
@@ -364,9 +390,9 @@ void GameBase::quit() {
 	delete test6;
 	delete test7;
 	delete test8;
+	delete yes_texture;
+	delete no_texture;
 	std::cout << std::endl;
-	//delete tutor1;
-	//delete tutor2;
 	gb = NULL;
 	t = NULL;
 	menu = NULL;
@@ -380,6 +406,8 @@ void GameBase::quit() {
 	test6 = NULL;
 	test7 = NULL;
 	test8 = NULL;
+	yes_texture = NULL;
+	no_texture = NULL;
 
 	SDL_Quit();
 	IMG_Quit();
@@ -395,7 +423,7 @@ void GameBase::run() {
 	while (running) {
 
 		newtime = SDL_GetTicks64();
-		delta = newtime - oldtime;
+		delta = (newtime - oldtime)/1000;
 
 		while (SDL_PollEvent(&Event)) {
 			eventCheck(&Event);
