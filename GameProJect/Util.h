@@ -30,8 +30,6 @@ namespace Util {
 
 static int tool_theard(void* ptr) {
 	Text* a = (Text*)ptr;
-	std::cout << a->test << " ";
-	std::cout << "a ";
 	SDL_Delay(3000);
 	Util::deload(*a);
 	a->a = 200;

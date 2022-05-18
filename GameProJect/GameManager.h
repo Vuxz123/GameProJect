@@ -77,6 +77,8 @@ public:
 	int mana;
 
 protected:
+	int type;
+
 	int highscore;
 
 	std::string word;
@@ -101,8 +103,16 @@ public:
 					if (word[i] != displace_word[i]) break;
 				}
 				guessChar(word[i]);
+				tool1_--;
+				score += 10;
+				callMessage("You have used one Eye of Future!");
 			}
-			tool1_--;
+			else {
+				callMessage("You don't have enough Mana!");
+			}
+		}
+		else {
+			callMessage("You don't have Item!");
 		}
 		
 	}
@@ -111,8 +121,17 @@ public:
 		if (tool2_ >= 1) {
 			if (useMana(-80)) {
 				displace_word = word;
+				tool2_--;
+				score += 10 * (word.length() / 2);
+				callMessage("You have used one Holy Grail!");
 			}
-			tool2_--;
+			else {
+				callMessage("You don't have enough Mana!");
+			}
+			
+		}
+		else {
+			callMessage("You don't have Item!");
 		}
 	}
 
@@ -120,6 +139,10 @@ public:
 		if (tool3_ >= 1) {
 			useMana(20);
 			tool3_--;
+			callMessage("You have used one Mana Potion!");
+		}
+		else {
+			callMessage("You don't have Item!");
 		}
 	}
 
@@ -127,8 +150,15 @@ public:
 		if (tool4_ >= 1) {
 			if (useMana(-10)) {
 				addHealth(20);
+				tool4_--;
+				callMessage("You have used one Health Potion!");
 			}
-			tool4_--;
+			else {
+				callMessage("You don't have enough Mana!");
+			}
+		}
+		else {
+			callMessage("You don't have Item!");
 		}
 	}
 
@@ -140,6 +170,9 @@ public:
 	void addHealth(int add) {
 		if (health == 100 && add > 0) return;
 		health = health + add;
+		if (health > 100) {
+			health = 100;
+		}
 		if (health < 0) {
 			health = 0;
 			return;
@@ -149,8 +182,12 @@ public:
 	bool useMana(int add) {
 		if (mana == 100 && add > 0) return true;
 		mana = mana + add;
+		if (mana > 100) {
+			mana = 100;
+			return true;
+		}
 		if (mana < 0) {
-			mana = 0;
+			mana -= add;
 			return false;
 		}
 	}
@@ -192,7 +229,12 @@ public:
 		std::ifstream wordinput; 
 		std::string temp;
 
-		wordinput.open("Word.txt", std::ifstream::in);
+		if (type > 0) {
+			wordinput.open("Word.txt", std::ifstream::in);
+		}
+		else {
+			wordinput.open("Pokemon.txt", std::ifstream::in);
+		}
 		
 		while (wordinput >> temp) {
 			wordlist.push_back(temp);
@@ -202,7 +244,13 @@ public:
 
 		int length = wordlist.size();
 
-		wordinput.open("WordMeaning.txt", std::ifstream::in);
+		if (type > 0) {
+			wordinput.open("PokemonMeaning.txt", std::ifstream::in);
+		}
+		else {
+			wordinput.open("PokemonMeaning.txt", std::ifstream::in);
+		}
+		
 
 		int i = 0;
 

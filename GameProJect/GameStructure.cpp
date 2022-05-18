@@ -95,6 +95,9 @@ void GameBase::init() {
 	mana_tool->load(renderer);
 	near_tool->load(renderer);
 	future_tool->load(renderer);
+	volume->load(renderer);
+	pokemontype->load(renderer);
+	normaltype->load(renderer);
 
 	load(tutor1, renderer, "TAB to change Button", "font.ttf", 12);
 	load(tutor2, renderer, "SPACE to select", "font.ttf", 12);
@@ -103,6 +106,8 @@ void GameBase::init() {
 
 	//Setup Object
 	SDL_Log("Setup Object");
+
+	category_abob.addVar("Volume", 1);
 
 	message_o.setRender([=](SDL_Renderer* renderer) {
 		if (manager.message.texture != NULL) {
@@ -194,6 +199,11 @@ void GameBase::init() {
 		pos; pos.x = 20; pos.y = 520; pos.w = placeholder.w; pos.h = placeholder.h;
 		SDL_RenderCopy(renderer, placeholder.texture, NULL, &pos);
 		deload(placeholder);
+
+		load(placeholder, renderer, "<SPELL LIST>", "font.ttf", 48);
+		pos; pos.x = 300 - placeholder.w/2; pos.y = 50; pos.w = placeholder.w; pos.h = placeholder.h;
+		SDL_RenderCopy(renderer, placeholder.texture, NULL, &pos);
+		deload(placeholder);
 		});
 
 	bg.setRender([=](SDL_Renderer* renderer) {
@@ -217,6 +227,7 @@ void GameBase::init() {
 	no_button.setSize(1, 1);
 
 	ctn_buttonlist.addButton(&yes_button, [=]() {
+		manager.setRandom();
 		changeScene(GAME);
 	}, 0);
 
@@ -243,7 +254,7 @@ void GameBase::init() {
 		}
 		else if (manager.getDisplay_Word() == manager.getWord()) {
 			changeScene(CONTINUE);
-			manager.setRandom();
+			manager.useMana(50);
 			manager.getItem();
 		}
 
@@ -338,12 +349,29 @@ void GameBase::init() {
 	pbo.setSize(1.5, 1.5);
 	pbo.setPos(30, 30 + 128 + 30 );
 
+	volume_button.setTexture(volume);
+	volume_button.setSize(1.5, 1.5);
+	volume_button.setPos(30, 30 + 128 + 30 + 50 + 30);
+
 	mbl.addButton(&pbo, [=]() {
 		changeScene(GAME);
 		manager.reset();
 		Mix_PlayMusic(music, -1);
 		return;
 		}, 0);
+
+	mbl.addButton(&volume_button, [=]() {
+		if (category_abob.getVar("Volume") == 1) {
+			Mix_VolumeMusic(0);
+			category_abob.setVar("Volume", 0);
+		}
+		else {
+			Mix_VolumeMusic(60);
+			category_abob.setVar("Volume", 1);
+		}
+		
+		return;
+	}, 1);
 
 	ao.addVar("colormod", 0);
 
@@ -441,13 +469,13 @@ void GameBase::init() {
 		load(score_text, renderer, "<ENDGAME>", "font.ttf", 64);
 		SDL_Rect pos; pos.x = 300 - score_text.w / 2; pos.y = 50; pos.w = score_text.w; pos.h = score_text.h;
 		SDL_RenderCopy(renderer, score_text.texture, NULL, &pos);
-		deload(placeholder);
+		deload(score_text);
 
 		auto iter = manager.scorelist.rbegin();
 		load(score_text, renderer, (* iter).toString(), "font.ttf", 24);
 		pos; pos.x = 300 - score_text.w / 2; pos.y = 250; pos.w = score_text.w; pos.h = score_text.h;
 		SDL_RenderCopy(renderer, score_text.texture, NULL, &pos);
-		deload(placeholder);
+		deload(score_text);
 
 		iter++;
 		load(score_text, renderer, (*iter).toString(), "font.ttf", 24);
@@ -498,6 +526,15 @@ void GameBase::init() {
 			}
 		}
 	});
+
+	ctn_abob.setRender([=](SDL_Renderer* renderer) {
+		load(placeholder, renderer, "The Word is " + manager.getWord(), "font.ttf", 24);
+		SDL_Rect pos; pos.x = 300 - placeholder.w / 2; pos.y = 200; pos.w = placeholder.w; pos.h = placeholder.h;
+		SDL_RenderCopy(renderer, placeholder.texture, NULL, &pos);
+		deload(placeholder);
+		});
+
+	
 	
 	//Setup Scene
 	SDL_Log("Setup Scene");
@@ -522,9 +559,9 @@ void GameBase::init() {
 	s3.push_back((GameObject*)&endgame_o);
 
 	s4.push_back((GameObject*)&bg);
-	s4.push_back((GameObject*)&bg);
 	s4.push_back((GameObject*)&ctn_text_ob);
 	s4.push_back((GameObject*)&ctn_buttonlist);
+	s4.push_back((GameObject*)&ctn_abob);
 
 	s5.push_back((GameObject*)&bg);
 	s5.push_back((GameObject*)&spell_buttonlist);
@@ -535,7 +572,7 @@ void GameBase::init() {
 	addScene(ENDGAME, s3);
 	addScene(CONTINUE, s4);
 	addScene(SPELL, s5);
-	addScene(MODE, s6);
+	addScene(CHOSECATEGORY, s6);
 
 	changeScene(MENU);
 
@@ -604,7 +641,13 @@ void GameBase::quit() {
 	delete mana_tool;
 	delete near_tool;
 	delete future_tool;
-	std::cout << std::endl;
+	delete volume;
+	delete pokemontype;
+	delete normaltype;
+
+	pokemontype = NULL;
+	normaltype = NULL;
+	volume = NULL;
 	future_tool = NULL;
 	near_tool = NULL;
 	mana_tool = NULL;

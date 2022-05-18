@@ -23,18 +23,18 @@ public:
 	const std::string ENDGAME = "scene3";
 	const std::string CONTINUE = "scene4";
 	const std::string SPELL = "scene5";
-	const std::string MODE = "scene6";
+	const std::string CHOSECATEGORY = "scene6";
 
 	std::vector<GameObject*> s1, s2, s3, s4, s5, s6;
 
 	TexOb mo = TexOb(), mbo = TexOb(), pbo = TexOb(), gbo = TexOb(), tob1 = TexOb(), tob2 = TexOb(), spello = TexOb(), guesso = TexOb(), sellecto = TexOb(), yes_button = TexOb(), no_button = TexOb(), ctn_text_ob = TexOb(), end_ob = TexOb();
-	TexOb t1b = TexOb(), t2b = TexOb(), t3b = TexOb(), t4b = TexOb();
+	TexOb t1b = TexOb(), t2b = TexOb(), t3b = TexOb(), t4b = TexOb(), volume_button = TexOb(), p_type = TexOb(), n_type = TexOb();
 	
 	MultiTexOb mto = MultiTexOb();
 	
-	ButtonList mbl = ButtonList(), ingamebuttonlist = ButtonList(), ctn_buttonlist = ButtonList(), spell_buttonlist = ButtonList();
+	ButtonList mbl = ButtonList(), ingamebuttonlist = ButtonList(), ctn_buttonlist = ButtonList(), spell_buttonlist = ButtonList(), category_buttonlist = ButtonList();
 	
-	AbOb ao = AbOb(), baro = AbOb(), gmo = AbOb(), bg = AbOb(), endgame_o = AbOb(), spell_o = AbOb(), message_o = AbOb();
+	AbOb ao = AbOb(), baro = AbOb(), gmo = AbOb(), bg = AbOb(), endgame_o = AbOb(), spell_o = AbOb(), message_o = AbOb(), ctn_abob = AbOb(), category_abob = AbOb();
 	
 	TextInput ao2 = TextInput();
 
@@ -60,6 +60,9 @@ public:
 	Texture* mana_tool = new Texture("tool3.png");
 	Texture* near_tool = new Texture("tool2.png");
 	Texture* future_tool = new Texture("tool1.png");
+	Texture* volume = new Texture("Volume.png");
+	Texture* pokemontype = new Texture("PokemonType.png");
+	Texture* normaltype = new Texture("NormalType.png");
 
 	Text tutor1, tutor2, h_m_display, ctn_y_n_text;
 
@@ -86,7 +89,7 @@ private:
 	SDL_Window* window;
 	SDL_Event Event;
 
-	const std::string VERSION = "0.2.0";
+	const std::string VERSION = "0.2.5";
 	const std::string TITLE = "Hang Man";
 
 public:
