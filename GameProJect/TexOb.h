@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-#include "Util.cpp"
+#include "Util.h"
 class TexOb : public GameObject
 {
 private:

@@ -8,8 +8,9 @@
 #include "AbOb.h"
 #include "MultiTexOb.h"
 #include "TextInput.h"
-#include "Util.cpp"
+#include "Util.h"
 #include "GameManager.h"
+#include <SDL_mixer.h>
 
 class GameBase
 {
@@ -21,16 +22,19 @@ public:
 	const std::string GAME = "scene2";
 	const std::string ENDGAME = "scene3";
 	const std::string CONTINUE = "scene4";
+	const std::string SPELL = "scene5";
+	const std::string MODE = "scene6";
 
-	std::vector<GameObject*> s1, s2, s3, s4;
+	std::vector<GameObject*> s1, s2, s3, s4, s5, s6;
 
-	TexOb mo = TexOb(), mbo = TexOb(), pbo = TexOb(), gbo = TexOb(), tob1 = TexOb(), tob2 = TexOb(), tob3 = TexOb(), spello = TexOb(), guesso = TexOb(), sellecto = TexOb(), yes_button = TexOb(), no_button = TexOb(), ctn_text_ob = TexOb(), end_ob = TexOb();
+	TexOb mo = TexOb(), mbo = TexOb(), pbo = TexOb(), gbo = TexOb(), tob1 = TexOb(), tob2 = TexOb(), spello = TexOb(), guesso = TexOb(), sellecto = TexOb(), yes_button = TexOb(), no_button = TexOb(), ctn_text_ob = TexOb(), end_ob = TexOb();
+	TexOb t1b = TexOb(), t2b = TexOb(), t3b = TexOb(), t4b = TexOb();
 	
 	MultiTexOb mto = MultiTexOb();
 	
-	ButtonList mbl = ButtonList(), ingamebuttonlist = ButtonList(), ctn_buttonlist = ButtonList();
+	ButtonList mbl = ButtonList(), ingamebuttonlist = ButtonList(), ctn_buttonlist = ButtonList(), spell_buttonlist = ButtonList();
 	
-	AbOb ao = AbOb(), baro = AbOb(), gmo = AbOb(), bg = AbOb();
+	AbOb ao = AbOb(), baro = AbOb(), gmo = AbOb(), bg = AbOb(), endgame_o = AbOb(), spell_o = AbOb(), message_o = AbOb();
 	
 	TextInput ao2 = TextInput();
 
@@ -52,12 +56,23 @@ public:
 	Texture* sellectbutton = new Texture("sellectchar.png");
 	Texture* yes_texture = new Texture("Yes.png");
 	Texture* no_texture = new Texture("No.png");
+	Texture* health_tool = new Texture("tool4.png");
+	Texture* mana_tool = new Texture("tool3.png");
+	Texture* near_tool = new Texture("tool2.png");
+	Texture* future_tool = new Texture("tool1.png");
 
-	Text tutor1, tutor2, tutor3, h_m_display, ctn_y_n_text;
+	Text tutor1, tutor2, h_m_display, ctn_y_n_text;
 
 	Text placeholder, selectedchar;
 
-	Text endgame;
+	Text endgame, score_text;
+
+	Mix_Music* music = NULL;
+
+	Mix_Chunk* endgame_effect = NULL;
+	Mix_Chunk* hit_effect = NULL;
+	Mix_Chunk* health_effect = NULL;
+	Mix_Chunk* click_effect = NULL;
 
 	GameManager manager = GameManager();
 	
@@ -71,7 +86,7 @@ private:
 	SDL_Window* window;
 	SDL_Event Event;
 
-	const std::string VERSION = "0.1.2";
+	const std::string VERSION = "0.2.0";
 	const std::string TITLE = "Hang Man";
 
 public:
