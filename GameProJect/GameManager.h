@@ -77,7 +77,7 @@ public:
 	int mana;
 
 protected:
-	int type;
+	
 
 	int highscore;
 
@@ -91,6 +91,9 @@ protected:
 	std::vector<char> guessedchar;
 
 public:
+	int type;
+	const int POKEMON = 0, NORMAL = 1;
+
 	int tool1_ = 0, tool2_ = 0, tool3_ = 0, tool4_ = 0;
 
 	void tool1() {
@@ -204,8 +207,6 @@ public:
 		health = 100;
 		mana = 100;
 
-		loadWord();
-		setRandom();
 	}
 
 	void reset() {
@@ -222,7 +223,6 @@ public:
 		mana = 100;
 
 		setRandom();
-		saveScore(false);
 	}
 
 	void loadWord() {
@@ -245,7 +245,7 @@ public:
 		int length = wordlist.size();
 
 		if (type > 0) {
-			wordinput.open("PokemonMeaning.txt", std::ifstream::in);
+			wordinput.open("WordMeaning.txt", std::ifstream::in);
 		}
 		else {
 			wordinput.open("PokemonMeaning.txt", std::ifstream::in);

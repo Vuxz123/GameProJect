@@ -109,6 +109,28 @@ void GameBase::init() {
 
 	category_abob.addVar("Volume", 1);
 
+	p_type.setTexture(pokemontype);
+	p_type.setPos(300 - pokemontype->getWidth() / 2, 200);
+
+	n_type.setTexture(normaltype);
+	n_type.setPos(300 - normaltype->getWidth() / 2, 400);
+
+	category_buttonlist.addButton(&n_type, [=]() {
+		manager.type = manager.NORMAL;
+		manager.loadWord();
+		manager.reset();
+		Mix_PlayMusic(music, -1);
+		changeScene(GAME);
+		}, 0);
+
+	category_buttonlist.addButton(&p_type, [=]() {
+		manager.type = manager.POKEMON;
+		manager.loadWord();
+		manager.reset();
+		Mix_PlayMusic(music, -1);
+		changeScene(GAME);
+		}, 1);
+
 	message_o.setRender([=](SDL_Renderer* renderer) {
 		if (manager.message.texture != NULL) {
 			SDL_Rect pos; pos.x = 300; pos.y = 20; pos.w = manager.message.w; pos.h = manager.message.h;
@@ -354,9 +376,7 @@ void GameBase::init() {
 	volume_button.setPos(30, 30 + 128 + 30 + 50 + 30);
 
 	mbl.addButton(&pbo, [=]() {
-		changeScene(GAME);
-		manager.reset();
-		Mix_PlayMusic(music, -1);
+		changeScene(CHOSECATEGORY);
 		return;
 		}, 0);
 
@@ -566,6 +586,10 @@ void GameBase::init() {
 	s5.push_back((GameObject*)&bg);
 	s5.push_back((GameObject*)&spell_buttonlist);
 	s5.push_back((GameObject*)&spell_o);
+
+	s6.push_back((GameObject*)&bg);
+	s6.push_back((GameObject*)&category_buttonlist);
+	s6.push_back((GameObject*)&category_abob);
 
 	addScene(MENU, s1);
 	addScene(GAME, s2);
